@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Exam</title>
+  <style>
+    /* Your existing CSS styles */
+    body {
+            margin: 0;
+            padding: 0;
+            background-color: #DFF5FF;
+            font-family: 'Arial', sans-serif; /* Fancy font */
+        }
+
+        ul{
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo img {
+            height: 40px; /* Set logo height as desired */
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-right: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Georgia', serif; /* Fancy font */
+        }
+
+    .container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 30px;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    textarea {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .options label,
+    .options input {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    button.create-exam-button {
+      padding: 15px 30px;
+      background-color: #007bff; /* Blue background color */
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: 'Roboto', sans-serif;
+      transition: background-color 0.3s;
+    }
+
+    button.create-exam-button:hover {
+      background-color: #0056b3; /* Darker blue background color on hover */
+    }
+
+    h2{
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      width: 180px;
+      height: 4px;
+      background-color: #32CD32;
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+      .centered-image {
+    display: flex;
+        justify-content: space-between;
+        align-items: center;
+}
+
+.centered-image img {
+    height:120px;
+    border-radius: 10px;
+     background-color: blue;
+
+}
+
+  </style>
+  <script>
+    var questionNumber = 2; // Initialize question number to 2
+    function addQuestion() {
+      var container = document.getElementById("questions-container");
+      var newQuestionDiv = document.createElement("div");
+      newQuestionDiv.innerHTML =
+        '<div id="question' + questionNumber + '">' +
+        '<label for="question">Question ' + questionNumber + ':</label>' +
+        '<input type="text" name="question[]" required>' +
+        '<div class="options">' +
+        '<input type="text" name="option1[]" placeholder="Option 1" required>' +
+        '<input type="text" name="option2[]" placeholder="Option 2" required>' +
+        '<input type="text" name="option3[]" placeholder="Option 3" required>' +
+        '<input type="text" name="option4[]" placeholder="Option 4" required>' +
+        '</div>' +
+        '<label for="answer">Answer:</label>' +
+        '<input type="text" name="answer[]" placeholder="Enter answer" required>' +
+        '</div><br>';
+      container.appendChild(newQuestionDiv);
+      questionNumber++; // Increment question number by 1
+    }
+
+  </script>
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/photo.jpg') }}" alt="Integrity Watch Logo">
+        <h1>Integrity Watch</h1>
+    </div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+        <li><a href="{{ url_for('exam_history') }}">Exam History</a></li>
+        <li><a href="{{ url_for('create_exam') }}">Create a New Exam</a></li>
+        <li><a href="{{ url_for('logout') }}">LogOut</a></li>
+    </ul>
+</nav>
+<h2>Create Exam</h2>
+<div class="container">
+    <div class="centered-image">
+    <img src="{{ url_for('static', filename='images/create.jpg') }}" alt="exam photo" style="filter: brightness(140%) saturate(130%);">
+        <p style="font-weight: bold; color: #7a857a; margin-bottom: 10px; text-align:center; font-size:20px">
+Design the exam according to your preferences and specifications.</p>
+    <img src="{{ url_for('static', filename='images/takeexam.png') }}" alt="exam photo"></div>
+  <form action="{{ url_for('create_exam') }}" method="post">
+    <label for="examTitle">Exam Title:</label>
+    <input type="text" name="examTitle" required><br>
+
+    <label for="examDescription">Exam Description:</label>
+    <textarea name="examDescription" rows="4" cols="50"></textarea><br>
+
+    <label for="examInstructions">Exam Instructions:</label>
+    <textarea name="examInstructions" rows="4" cols="50"></textarea><br>
+
+    <label for="examDuration">Exam Duration (minutes):</label>
+    <input type="number" name="examDuration" required><br>
+
+    <label for="registrationDate">Last Date to Register:</label>
+    <input type="date" name="registrationDate" required><br>
+
+    <label for="examDate">Exam Date:</label>
+    <input type="date" name="examDate" required><br>
+
+    <div id="questions-container">
+      <label for="question">Question 1:</label>
+      <input type="text" name="question[]" required>
+      <div class="options">
+        <input type="text" name="option1[]" placeholder="Option 1" required>
+        <input type="text" name="option2[]" placeholder="Option 2" required>
+        <input type="text" name="option3[]" placeholder="Option 3" required>
+        <input type="text" name="option4[]" placeholder="Option 4" required>
+      </div>
+        <label for="answer">Answer:</label>
+        <input type="text" name="answer[]" placeholder="Enter correct option" required>
+      <br>
+    </div>
+
+    <button type="button" onclick="addQuestion()" class="create-exam-button">Add Another Question</button>
+
+    <br><br>
+    <button type="submit" class="create-exam-button">Create Exam</button>
+    <br><br>
+  </form>
+</div>
+</body>
+</html>

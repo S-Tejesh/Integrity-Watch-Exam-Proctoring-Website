@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam History</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #DFF5FF;
+            font-family: 'Arial', sans-serif; /* Fancy font */
+        }
+
+        ul{
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo img {
+            height: 40px; /* Set logo height as desired */
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-right: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Georgia', serif; /* Fancy font */
+        }
+
+        h2{
+            color: #007bff; /* White color for the heading */
+            text-align: center; /* Center align the heading */
+            margin-bottom: 19.920px;
+            position: relative; /* Position relative for pseudo-element */
+        }
+
+        h2::after {
+            content: ''; /* Create pseudo-element for styling */
+            display: block;
+            width: 200px; /* Adjust width as needed */
+            height: 4px; /* Adjust height as needed */
+            background-color: #32CD32; /* Darker shade of blue for the line */
+            position: absolute;
+            bottom: -7px; /* Adjust position as needed to align with text */
+            left: 50%; /* Align to the center */
+            transform: translateX(-50%); /* Center horizontally */
+        }
+        .exam-box {
+        padding:20px;
+    width: 70%;
+    margin: 20px auto; /* Center the exam boxes horizontally and add some top and bottom margin */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    overflow: hidden; /* Hide overflowing content */
+}
+
+.exam-box:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover for interaction */
+}
+
+.exam-box-content {
+    padding: 20px; /* Add padding to the content inside the exam box */
+}
+
+.exam-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333333;
+}
+
+.exam-description {
+    font-size: 16px;
+    color: #666666;
+    margin-bottom: 20px;
+}
+
+.exam-date {
+    font-style: italic;
+    color: #888888;
+    margin-bottom: 10px;
+}
+
+.student-count {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.exam-icon {
+    float: right;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    margin-right:30px;
+}
+
+.exam-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.exam-link a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.exam-link a:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/photo.jpg') }}" alt="Integrity Watch Logo">
+        <h1>Integrity Watch</h1>
+    </div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+        <li><a href="{{ url_for('exam_history') }}">Exam History</a></li>
+        <li><a href="{{ url_for('create_exam') }}">Create a New Exam</a></li>
+        <li><a href="{{ url_for('logout') }}">LogOut</a></li>
+    </ul>
+</nav>
+<h2>Exam History</h2>
+
+{% if exam_history %}
+    <p style="font-weight: bold; color: #7a857a; margin-bottom: 10px; text-align:center; font-size:20px">Please find the details of all exams conducted by you.</p>
+    {% for exam in exam_history %}
+        <div class="exam-box">
+            <div class="exam-icon">
+                <img src="{{ url_for('static', filename='images/examicon.png') }}" alt="Exam Icon">
+            </div>
+            <h3 class="exam-title">{{ exam.title }}</h3>
+            <p class="exam-description">{{ exam.description }}</p>
+            <p class="exam-date">Exam Date: {{ exam.exam_date.strftime('%Y-%m-%d') }}</p>
+            <p class="student-count">Number of Students Registered: {{ exam_student_counts[exam._id] }}</p>
+            <div class="exam-link">
+                <a href="{{ url_for('display_images', exam_id=exam._id) }}">View Details</a>
+                <a href="{{ url_for('exam_results', exam_id=exam._id) }}" style="margin-left:50px;">View Results</a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p align="center" style="margin-top:30px;">No exams available in the history.</p>
+{% endif %}
+</body>
+</html>

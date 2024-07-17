@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Images</title>
+</head>
+<body>
+    {% for image_base64 in images_base64 %}
+        <img src="data:image/jpeg;base64,{{ image_base64 }}" alt="Image">
+    {% endfor %}
+</body>
+</html>

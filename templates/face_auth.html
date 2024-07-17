@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Authentication</title>
+    <style>
+    body {
+    margin: 0;
+    padding: 0;
+    background-color: #DFF5FF;
+    font-family: 'Arial', sans-serif;
+}
+.container{
+            width: 60%;
+            margin: 50px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adjust the blur radius and color */
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+        }
+/* Navigation Styles */
+nav {
+    background-color: #007bff;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-right: 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Heading Styles */
+.exam-details-heading {
+    color: #007bff;
+    font-size: 36px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#verificationFailedMessage {
+    color: red;
+    margin-bottom: 20px;
+}
+
+#videoFeed {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rectangle-overlay {
+    position: absolute;
+    top: 120px;
+    left: calc(50% - 125px);
+    width: 250px;
+    height: 250px;
+    border: 2px solid red;
+    z-index: 1;
+}
+
+#capturedImage {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #666; /* Medium gray */
+    font-family: 'Arial', sans-serif; /* Use backup font */
+    text-align:center;
+}
+.guideline {
+            margin-bottom: 20px; /* Add some space below the guideline */
+            padding: 10px; /* Add padding to make the guideline more prominent */
+            background-color: #ffcccc; /* Light red background */
+            color: #cc0000; /* Dark red text color */
+            font-size: 18px; /* Increase font size */
+            font-weight: bold; /* Make the text bold */
+            border-radius: 5px; /* Add rounded corners */
+            width: 80%; /* Set width */
+            text-align: center; /* Center align the text */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+            margin: 20px auto; /* Center the guideline horizontally */
+        }
+        #verificationFailedMessage {
+    display: none;
+    color: red;
+    text-align: center;
+    background-color: #ffebee; /* Light red background */
+    padding: 10px; /* Add padding */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 20px; /* Add some space below the message */
+    font-family: 'Arial', sans-serif; /* Use Arial font */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    width: 80%; /* Set width */
+    margin: 20px auto; /* Center the guideline horizontally */
+}
+        #capturedImageHeading {
+    text-align: center; /* Center align the text */
+    font-size: 24px; /* Adjust font size as needed */
+    color: #007bff; /* Blue color */
+    margin-top: 60px; /* Add margin space on top */
+    margin-bottom: 10px; /* Add margin space on bottom */
+    font-family: 'Arial', sans-serif; /* Use Arial font */
+    text-transform: uppercase; /* Convert text to uppercase */
+    letter-spacing: 1px; /* Add letter spacing for better readability */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Add subtle text shadow */
+}
+
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/photo.jpg') }}" alt="Integrity Watch Logo">
+            <h1>Integrity Watch</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('exams') }}">Exams</a></li>
+            <li><a href="{{ url_for('upcoming_exams') }}">Upcoming</a></li>
+            <li><a href="{{ url_for('logout') }}">LogOut</a></li>
+        </ul>
+    </nav>
+    <p style="font-weight: bold; color: #7a857a; margin-bottom: 10px; text-align:center; font-size:20px">
+        Please verify your identity before proceeding to the exam.</p>
+    <div class="container">
+    <h2 class="exam-details-heading">{{ exam.title }} Exam</h2>
+    <p><strong>Description:</strong> {{ exam.description }}</p>
+    <p><strong>Duration of Exam:</strong> {{ exam.duration }}</p>
+        <p><strong>Instructions:</strong> {{ exam.instructions }}</p>
+    <div class="guideline">Make sure to keep your face in the red box</div>
+    <div style="position: relative;">
+        <!-- Video feed from webcam -->
+        <video id="videoFeed" autoplay></video>
+        <div class="rectangle-overlay"></div>
+        <button onclick="captureImage()">Capture Image</button>
+    </div>
+
+    <div id="capturedImageContainer" style="display: none;">
+        <h2 id="capturedImageHeading">Captured Image</h2>
+        <img id="capturedImage" alt="Captured Image">
+    </div>
+        <div id="verificationFailedMessage" style="display: none;">
+    Face verification failed. Please capture another image and try again.
+</div>
+
+    <button onclick="submitExam()">Verify</button>
+    </div>
+
+    <script>
+        var videoStream;
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            var videoElement = document.getElementById('videoFeed');
+            videoElement.srcObject = stream;
+            videoStream = stream;
+        })
+        .catch(function (error) {
+            console.error('Error accessing webcam:', error);
+        });
+
+        function captureImage() {
+            var videoElement = document.getElementById('videoFeed');
+            var canvas = document.createElement('canvas');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            var context = canvas.getContext('2d');
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            // Create a new image element and set its source to the captured image data
+            var capturedImageElement = new Image();
+            capturedImageElement.onload = function () {
+                // Display the captured image
+                document.getElementById('capturedImageContainer').style.display = 'block';
+                document.getElementById('capturedImage').src = capturedImageElement.src;
+            };
+
+            capturedImageElement.src = canvas.toDataURL('image/jpeg');
+        }
+
+        function submitExam() {
+            var examId = '{{ exam._id }}';
+            // Get the raw image data from the canvas
+            var videoElement = document.getElementById('videoFeed');
+            var canvas = document.createElement('canvas');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            var context = canvas.getContext('2d');
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            var imageArray = new Uint8Array(imageData.data.buffer);
+
+            stopWebcam();
+            sendImageToBackend(imageArray, examId);
+        }
+
+        function stopWebcam() {
+            // Stop each track in the stream
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function sendImageToBackend(imageDataArray, exam_id) {
+            fetch(`/face-authentication/${exam_id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/octet-stream',
+                },
+                body: imageDataArray,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Verification results:', data);
+                if (data.verified === 'True') {
+                    window.location.href = `/loading/${exam_id}`;
+                } else {
+                    console.log('Verification failed.');
+                    showVerificationFailedMessage();
+                }
+            })
+            .catch(error => {
+                console.error('Error sending data to backend:', error);
+            });
+        }
+
+        function showVerificationFailedMessage() {
+            var errorContainer = document.getElementById('verificationFailedMessage');
+            errorContainer.style.display = 'block';
+            // Restart the webcam after showing the verification failed message
+            startWebcam();
+        }
+
+        function startWebcam() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    var videoElement = document.getElementById('videoFeed');
+                    videoElement.srcObject = stream;
+                    videoStream = stream;
+                })
+                .catch(function (error) {
+                    console.error('Error accessing webcam:', error);
+                });
+        }
+    </script>
+</body>
+</html>

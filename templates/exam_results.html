@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Results</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #DFF5FF; /* Light gray background */
+            font-family: Arial, sans-serif; /* Default font */
+        }
+
+        nav {
+            background-color: #007bff; /* Blue navbar */
+            color: #fff; /* White text */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo img {
+            height: 40px; /* Logo height */
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-right: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Georgia', serif; /* Fancy font */
+        }
+
+        h2 {
+            color: #007bff; /* Blue heading */
+            text-align: center; /* Center align */
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 200px; /* Line width */
+            height: 4px; /* Line thickness */
+            background-color: #28a745; /* Green line */
+            position: absolute;
+            bottom: -7px; /* Position below text */
+            left: 50%; /* Center align */
+            transform: translateX(-50%); /* Center horizontally */
+        }
+
+        table {
+            width: 70%;
+            margin: 40px auto;
+            border-collapse: collapse;
+            background-color: #fff; /* White background */
+            border-radius: 8px; /* Rounded corners */
+            overflow: hidden; /* Hide overflow */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+
+        th, td {
+            padding: 12px 15px; /* Cell padding */
+            border: 1px solid #dee2e6; /* Border color */
+            text-align: center; /* Left align text */
+        }
+
+        th {
+            background-color: #007bff; /* Blue header */
+            color: #fff; /* White text */
+            font-weight: bold; /* Bold font */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa; /* Alternate row color */
+        }
+
+        tr:hover {
+            background-color: #e9ecef; /* Hover color */
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/photo.jpg') }}" alt="Integrity Watch Logo">
+        <h1>Integrity Watch</h1>
+    </div>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('admin_home') }}">Home</a></li>
+        <li><a href="{{ url_for('exam_history') }}">Exam History</a></li>
+        <li><a href="{{ url_for('create_exam') }}">Create a New Exam</a></li>
+        <li><a href="{{ url_for('logout') }}">LogOut</a></li>
+    </ul>
+</nav>
+<h2>Exam Results</h2>
+{% if not conducted %}
+<p align="center" style="margin-top:30px;">Exam is not yet conducted.</p>
+{% else %}
+<table>
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Total Marks</th>
+            <th>Percentage</th>
+            <th>Cheating Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in exam_results %}
+        <tr>
+            <td>{{ result.rank }}</td>
+            <td>{{ result.user_id }}</td>
+            <td>{{ result.name }}</td>
+            <td>{{ result.exam_result.score }}</td>
+            <td>{{ result.exam_result.total_marks }}</td>
+            <td>{{ result.exam_result.percentage }}</td>
+            <td>{{ result.cheat_score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+</body>
+</html>

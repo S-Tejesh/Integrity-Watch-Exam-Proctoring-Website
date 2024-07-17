@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ exam.title }} Details</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #DFF5FF;
+            font-family: 'Arial', sans-serif; /* Fancy font */
+        }
+
+        ul{
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo img {
+            height: 40px; /* Set logo height as desired */
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-right: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Georgia', serif; /* Fancy font */
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Make the content fill the viewport height */
+            text-align: center;
+            margin-top:9%;
+            font-family: 'Roboto', sans-serif;
+            padding: 40px;
+
+        }
+        h2 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333; /* Dark gray */
+            font-family: 'Arial', sans-serif; /* Use backup font */
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #666; /* Medium gray */
+            font-family: 'Arial', sans-serif; /* Use backup font */
+        }
+
+        video {
+            max-width: 100%; /* Ensure the video doesn't exceed its container's width */
+            max-height: 80vh; /* Limit the video height */
+            position: relative; /* Make video container relative */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .rectangle-overlay {
+            position: absolute;
+            top: 120px; /* Adjust this value to position the rectangle vertically */
+            left: 200px; /* Adjust this value to position the rectangle horizontally */
+            width: 250px; /* Adjust this value to set the width of the rectangle */
+            height: 250px; /* Adjust this value to set the height of the rectangle */
+            border: 2px solid red; /* Color and thickness of the rectangle border */
+            z-index: 1; /* Ensure the rectangle is on top of the video */
+        }
+        #take-pictures-btn,#reset-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right:10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #take-pictures-btn:hover ,#reset-btn:hover{
+            background-color: #0056b3;
+        }
+        form {
+            margin-top: 100px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; /* Allow button container to wrap */
+        }
+        #message-display {
+            margin-bottom: 20px;
+            color: #333; /* Dark gray */
+            font-size: 16px;
+        }
+        .guideline {
+            margin-bottom: 20px; /* Add some space below the guideline */
+            padding: 10px; /* Add padding to make the guideline more prominent */
+            background-color: #ffcccc; /* Light red background */
+            color: #cc0000; /* Dark red text color */
+            font-size: 18px; /* Increase font size */
+            font-weight: bold; /* Make the text bold */
+            border-radius: 5px; /* Add rounded corners */
+            width: 80%; /* Set width */
+            text-align: center; /* Center align the text */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+            margin: 20px auto; /* Center the guideline horizontally */
+        }
+        .container{
+            width: 60%;
+            margin: 50px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adjust the blur radius and color */
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+        }
+        .exam-details-heading {
+            font-size: 36px; /* Increase the font size */
+            font-weight: bold;
+            color: #007bff; /* Blue color */
+            text-transform: uppercase; /* Convert text to uppercase */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add text shadow */
+            margin-bottom: 30px; /* Increase margin bottom */
+            font-family: 'Roboto', sans-serif; /* Use Roboto font */
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/photo.jpg') }}" alt="Integrity Watch Logo">
+            <h1>Integrity Watch</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('exams') }}">Exams</a></li>
+            <li><a href="{{ url_for('upcoming_exams') }}">Upcoming</a></li>
+            <li><a href="{{ url_for('logout') }}">LogOut</a></li>
+        </ul>
+    </nav>
+    <p style="font-weight: bold; color: #7a857a; margin-bottom: 10px; margin-top:30px; text-align:center; font-size:20px">
+        Please register for the exam by providing the details .</p>
+    <div class="container">
+        <div class="content">
+            <h2 class="exam-details-heading">{{ exam.title }} Exam Details</h2>
+            <p><strong>Description:</strong> {{ exam.description }}</p>
+            <p><strong>Duration of Exam:</strong> {{ exam.duration }}</p>
+            <p><strong>Last Date to Register:</strong> {{ exam.registration_date.strftime('%Y-%m-%d') }}</p>
+            <p><strong>Exam Date:</strong> {{ exam.exam_date.strftime('%Y-%m-%d')}}</p>
+            <p><strong>Instructions:</strong> {{ exam.instructions }}</p>
+            <div class="guideline">Make sure to keep your face in the red box</div>
+            <!-- Video feed from webcam with rectangle overlay -->
+            <div style="position: relative;">
+                <video id="videoFeed" autoplay></video>
+                <div class="rectangle-overlay"></div>
+            </div>
+            <div class="button-container">
+                <button id="take-pictures-btn">Take Pictures</button>
+                <button id="reset-btn">Reset Images</button>
+            </div>
+            <div id="message-display"></div>
+        </div>
+
+
+    <form method="post" action="{{ url_for('upload_image') }}" enctype="multipart/form-data" id="image-upload-form">
+        <!-- Hidden input for user ID -->
+        <input type="hidden" name="user_id" value="{{ session.get('user_id') }}">
+        <!-- Hidden input for exam ID -->
+        <input type="hidden" name="exam_id" value="{{ exam._id }}">
+        <!-- Hidden input for captured images -->
+        <input type="hidden" name="captured_images">
+        <input type="submit" value="Register for Exam">
+    </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const videoFeed = document.getElementById('videoFeed');
+            const takePicturesBtn = document.getElementById('take-pictures-btn');
+            const imageUploadForm = document.getElementById('image-upload-form');
+            const messageDisplay = document.getElementById('message-display');
+            const resetBtn = document.getElementById('reset-btn');
+
+            let capturedImages = [];
+            let stream;
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (streamObj) {
+                    stream = streamObj;
+                    videoFeed.srcObject = stream;
+                })
+                .catch(function (error) {
+                    console.error('Error accessing webcam:', error);
+                });
+
+            takePicturesBtn.addEventListener('click', async function () {
+                for (let i = 0; i < 10; i++) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = videoFeed.videoWidth;
+                    canvas.height = videoFeed.videoHeight;
+                    const canvasContext = canvas.getContext('2d');
+                    canvasContext.drawImage(videoFeed, 0, 0, canvas.width, canvas.height);
+
+                    // Convert the canvas content to a data URL
+                    const imageDataURL = canvas.toDataURL('image/jpeg');
+
+                    // Store the captured image in the array
+                    capturedImages.push(imageDataURL);
+
+                    // Introduce a delay (adjust the delay as needed)
+                    await new Promise(resolve => setTimeout(resolve, 10));
+                }
+
+                console.log('Captured images count:', capturedImages.length);
+
+                // Update the hidden input field with the array of captured images
+                imageUploadForm.querySelector('[name="captured_images"]').value = JSON.stringify(capturedImages);
+                 if (stream) {
+                    stream.getTracks().forEach(track => {
+                        track.stop();
+                    });
+                }
+
+                // Show message to the user
+                messageDisplay.textContent = "Webcam stream stopped. You can now upload images.";
+            });
+
+            // Reset button click event
+            resetBtn.addEventListener('click', function () {
+                // Clear captured images array
+                capturedImages = [];
+
+                // Reset message display
+                messageDisplay.textContent = "";
+
+                // Restart webcam stream
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (streamObj) {
+                        stream = streamObj;
+                        videoFeed.srcObject = stream;
+                    })
+                    .catch(function (error) {
+                        console.error('Error accessing webcam:', error);
+                    });
+            });
+        });
+    </script>
+</body>

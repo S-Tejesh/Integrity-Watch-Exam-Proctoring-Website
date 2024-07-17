@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+
+  <title>Loading Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #DFF5FF;
+    }
+
+.header h1 {
+  color: #0066ff; /* Blue color */
+  font-family: 'Dancing Script', cursive, sans-serif; /* Use cursive font */
+  font-size: 32px; /* Adjust font size as needed */
+  font-weight: bold; /* Optionally adjust font weight */
+  text-transform: capitalize; /* Optionally capitalize text */
+text-align:center;
+margin-top:50px;
+}
+
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 20vh; /* Adjusted to accommodate the header */
+      position: relative; /* Needed for absolute positioning of the shadow */
+    }
+
+    /* Add gray circle */
+    .loader::before {
+      content: "";
+      position: absolute;
+      top: 18%;
+      left: 46%;
+      transform: translate(-50%, -50%);
+      width: 120px; /* Adjust as needed */
+      height: 120px; /* Adjust as needed */
+      border-radius: 50%;
+      background-color: #969df5; /* Gray color */
+      z-index: -1; /* Behind the image */
+      animation: pulse 2s infinite alternate; /* Add pulse animation */
+    }
+
+    #loadingImage {
+      position: relative; /* Ensure it stays within its parent */
+      border-radius: 50%; /* Make the image round */
+      height: 100px; /* Adjust the height */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+      filter: brightness(1.2) drop-shadow(0 0 10px #00f); /* Add glow */
+      animation: spin 2s linear infinite; /* Add spin animation */
+    }
+
+    .loader::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 120%; /* Adjusted to place the shadow below the gray circle */
+      transform: translateX(-50%);
+      width: 13%; /* Adjust width as needed */
+      height: 7px; /* Adjust height as needed */
+      background-color: rgba(0, 0, 0, 0.4); /* Shadow color with reduced opacity */
+      border-radius: 50%; /* Make it round */
+      filter: blur(4px); /* Add blur effect */
+      opacity: 0.7; /* Adjust opacity as needed */
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.1);
+      }
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes glow {
+      0% {
+        filter: brightness(1.2) drop-shadow(0 0 10px #00f);
+      }
+      50% {
+        filter: brightness(1.3) drop-shadow(0 0 15px #00f);
+      }
+      100% {
+        filter: brightness(1.2) drop-shadow(0 0 10px #00f);
+      }
+    }
+  #countdown {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+}
+.exam-box {
+        padding: 20px;
+        width: 30%;
+        margin: 100px auto; /* Center the exam boxes horizontally and add some top and bottom margin */
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+        overflow: hidden; /* Hide overflowing content */
+    }
+
+    .exam-box:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover for interaction */
+    }
+
+    .exam-box p {
+        font-size: 18px;
+        color: #0710eb;
+        text-align: center;
+        font-weight: bold; /* Make the text bold */
+        font-style: italic; /* Make the text italic */
+        margin: 0; /* Remove default margin */
+        padding: 10px 0; /* Add some padding top and bottom */
+    }
+  </style>
+</head>
+  <body>
+  <div class="header">
+    <h1>Integrity Watch is watching you</h1>
+  </div>
+  <div class="exam-box">
+    <p>Exam has been created , leave the rest to us !</p>
+</div>
+  <div class="countdown-container">
+    <h1 id="countdown">Redirecting in 10 seconds...</h1>
+  </div>
+  <div class="loader">
+    <img src="{{ url_for('static', filename='images/loading.jpg') }}" alt="Loading..." id="loadingImage">
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var countdownElement = document.getElementById("countdown");
+      var timeLeft = 10; // 20 seconds
+      countdownElement.textContent = "Redirecting in " + timeLeft + " seconds...";
+
+      var countdownInterval = setInterval(function() {
+        timeLeft--;
+        countdownElement.textContent = "Redirecting in " + timeLeft + " seconds...";
+
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          window.location.href = "{{ url_for('admin_home') }}";
+        }
+      }, 1000); // Update every second
+    });
+  </script>
+</body>
+
+</html>
